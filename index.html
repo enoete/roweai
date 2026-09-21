@@ -84,7 +84,14 @@
   .seg button .dot { width: 9px; height: 9px; border-radius: 50%; }
   .seg button[data-app="Outlook"] .dot { background: #0F6CBD; }
   .seg button[data-app="Gmail"] .dot { background: #EA4335; }
-  .seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(23,32,51,.12); }
+  .seg button[data-app="Outlook"][aria-pressed="true"] { background: #0F6CBD; color: #fff; box-shadow: 0 2px 8px rgba(15,108,189,.35); }
+  .seg button[data-app="Gmail"][aria-pressed="true"] { background: #EA4335; color: #fff; box-shadow: 0 2px 8px rgba(234,67,53,.35); }
+  .seg button[aria-pressed="true"] .dot { background: #fff; }
+  .picker .hint.on { color: var(--ink); font-weight: 600; }
+  body[data-app="Outlook"] .only-g, body[data-app="Gmail"] .only-o, body[data-app] .only-g-sep { display: none; }
+  .app.flash { animation: flash 1.2s ease; }
+  @keyframes flash { 0% { background: #FFE58A; } 100% { background: #EEF1F7; } }
+  @media (prefers-reduced-motion: reduce) { .app.flash { animation: none; } }
   .picker .hint { color: var(--muted); font-size: 14px; }
 
   /* Layout */
@@ -277,7 +284,7 @@
         <button type="button" data-app="Outlook" aria-pressed="false"><span class="dot"></span>Outlook</button>
         <button type="button" data-app="Gmail" aria-pressed="false"><span class="dot"></span>Gmail</button>
       </div>
-      <span class="hint">Prompts will name your app when copied.</span>
+      <span class="hint" id="hint" aria-live="polite">Pick your app to tailor the steps and prompts.</span>
     </div>
   </div>
 </header>
@@ -306,22 +313,22 @@
         <div class="way">
           <h4>Ask about your mailbox</h4>
           <dl>
-            <dt><span class="dot o"></span>Outlook</dt><dd>Click the <strong>Copilot</strong> icon in the toolbar to open the chat pane.</dd>
-            <dt><span class="dot g"></span>Gmail</dt><dd>Click the <strong>Gemini</strong> star at the top right to open the side panel.</dd>
+            <dt class="only-o"><span class="dot o"></span>Outlook</dt><dd class="only-o">Click the <strong>Copilot</strong> icon in the toolbar to open the chat pane.</dd>
+            <dt class="only-g"><span class="dot g"></span>Gmail</dt><dd class="only-g">Click the <strong>Gemini</strong> star at the top right to open the side panel.</dd>
           </dl>
         </div>
         <div class="way">
           <h4>Summarize one email</h4>
           <dl>
-            <dt><span class="dot o"></span>Outlook</dt><dd>Open the email and click <strong>Summary</strong> at the top.</dd>
-            <dt><span class="dot g"></span>Gmail</dt><dd>Open the email and click <strong>Summarize this email</strong>.</dd>
+            <dt class="only-o"><span class="dot o"></span>Outlook</dt><dd class="only-o">Open the email and click <strong>Summary</strong> at the top.</dd>
+            <dt class="only-g"><span class="dot g"></span>Gmail</dt><dd class="only-g">Open the email and click <strong>Summarize this email</strong>.</dd>
           </dl>
         </div>
         <div class="way">
           <h4>Get help replying</h4>
           <dl>
-            <dt><span class="dot o"></span>Outlook</dt><dd>Click Reply, then <strong>Draft with Copilot</strong>.</dd>
-            <dt><span class="dot g"></span>Gmail</dt><dd>Check the <strong>suggested replies</strong>, or use <strong>Help me write</strong>.</dd>
+            <dt class="only-o"><span class="dot o"></span>Outlook</dt><dd class="only-o">Click Reply, then <strong>Draft with Copilot</strong>.</dd>
+            <dt class="only-g"><span class="dot g"></span>Gmail</dt><dd class="only-g">Check the <strong>suggested replies</strong>, or use <strong>Help me write</strong>.</dd>
           </dl>
         </div>
       </div>
@@ -385,7 +392,7 @@
       <p>Open the email you are replying to, then ask.</p>
       <div class="callout">
         <span class="bang">!</span>
-        <div>Always end a drafting prompt with <strong>“Create it as a reply draft in Outlook”</strong> or <strong>“Create it as a reply draft in Gmail”</strong>. Without that line, the draft stays as text in the chat pane and no compose window opens.</div>
+        <div>Always end a drafting prompt with <span class="only-o"><strong>“Create it as a reply draft in Outlook”</strong></span><span class="only-o only-g-sep"> or </span><span class="only-g"><strong>“Create it as a reply draft in Gmail”</strong></span>. Without that line, the draft stays as text in the chat pane and no compose window opens.</div>
       </div>
       <h3>Ask</h3>
       <div class="grid">
@@ -490,6 +497,12 @@
     document.querySelectorAll(".seg button").forEach(function (b) {
       b.setAttribute("aria-pressed", String(b.dataset.app === app));
     });
+    if (app) document.body.setAttribute("data-app", app); else document.body.removeAttribute("data-app");
+    var hint = document.getElementById("hint");
+    hint.textContent = app
+      ? "Showing " + app + " steps only. Drafting prompts now say \u201cin " + app + "\u201d."
+      : "Pick your app to tailor the steps and prompts.";
+    hint.classList.toggle("on", !!app);
   }
 
   document.querySelectorAll(".seg button").forEach(function (b) {
@@ -497,6 +510,7 @@
       app = app === b.dataset.app ? null : b.dataset.app;
       try { app ? localStorage.setItem("prompt-sheet-app", app) : localStorage.removeItem("prompt-sheet-app"); } catch (e) {}
       render();
+      document.querySelectorAll(".app").forEach(function (el) { el.classList.add("flash"); });
     });
   });
 
