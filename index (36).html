@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>AI Email Assistant: Starter Prompts</title>
+<meta name="description" content="Copy-ready prompts for Copilot in Outlook and Gemini in Gmail.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #F7F8FC;
+    --card: #FFFFFF;
+    --ink: #172033;
+    --muted: #5E6A82;
+    --line: #E4E8F1;
+    --shadow: 0 1px 2px rgba(23, 32, 51, .04), 0 6px 20px rgba(23, 32, 51, .06);
+    --font: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --c: #3B5BDB;       /* per-section accent, overridden below */
+    --c-soft: #EDF1FF;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 16.5px/1.65 var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { outline: 3px solid #9DB2FF; outline-offset: 2px; border-radius: 8px; }
+
+  /* Hero */
+  .hero {
+    background:
+      radial-gradient(900px 380px at 12% -10%, #DCE6FF 0%, transparent 60%),
+      radial-gradient(700px 360px at 95% 0%, #FFE3EC 0%, transparent 55%),
+      radial-gradient(600px 300px at 60% 120%, #D9F7EF 0%, transparent 60%),
+      #FFFFFF;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-inner { max-width: 1120px; margin: 0 auto; padding: 72px 28px 56px; }
+  .hero h1 {
+    font-weight: 800;
+    font-size: clamp(34px, 5.4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+    max-width: 16ch;
+  }
+  .hero p { font-size: 19px; color: var(--muted); margin: 0 0 32px; max-width: 58ch; }
+
+  .picker {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,.8);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 10px 12px 10px 18px;
+    box-shadow: var(--shadow);
+  }
+  .picker .label { font-weight: 600; }
+  .seg { display: inline-flex; background: #EEF1F7; border-radius: 12px; padding: 4px; gap: 4px; }
+  .seg button {
+    font: 600 15px var(--font);
+    border: 0;
+    border-radius: 9px;
+    padding: 8px 18px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background .15s, color .15s, box-shadow .15s;
+  }
+  .seg button .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .seg button[data-app="Outlook"] .dot { background: #0F6CBD; }
+  .seg button[data-app="Gmail"] .dot { background: #EA4335; }
+  .seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(23,32,51,.12); }
+  .picker .hint { color: var(--muted); font-size: 14px; }
+
+  /* Layout */
+  .layout {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 48px 28px 96px;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 48px;
+  }
+  nav.toc { position: sticky; top: 24px; align-self: start; }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  nav.toc a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  nav.toc a:hover { background: #fff; color: var(--ink); box-shadow: var(--shadow); }
+  nav.toc .swatch { width: 10px; height: 10px; border-radius: 3px; background: var(--c); flex: none; }
+
+  main { max-width: 780px; }
+
+  /* Section accents */
+  .s-start  { --c: #475569; --c-soft: #EEF2F7; }
+  .s-catch  { --c: #3B5BDB; --c-soft: #EDF1FF; }
+  .s-thread { --c: #7C3AED; --c-soft: #F3EDFF; }
+  .s-reply  { --c: #0E9F88; --c-soft: #E3F7F2; }
+  .s-find   { --c: #D97706; --c-soft: #FFF3E0; }
+  .s-plan   { --c: #DB2777; --c-soft: #FDEBF4; }
+  .s-habits { --c: #475569; --c-soft: #EEF2F7; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 24px; }
+  .sec-head { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .icon {
+    width: 48px; height: 48px; flex: none;
+    border-radius: 14px;
+    background: var(--c-soft);
+    color: var(--c);
+    display: grid; place-items: center;
+  }
+  .icon svg { width: 24px; height: 24px; }
+  h2 { font-size: 28px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+  .step { color: var(--c); font-weight: 700; font-size: 14px; display: block; margin-bottom: 2px; }
+  section > p { color: var(--muted); max-width: 62ch; margin: 0 0 8px; }
+
+  h3 {
+    display: inline-block;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--c);
+    background: var(--c-soft);
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin: 26px 0 12px;
+  }
+
+  .grid { display: grid; gap: 12px; }
+  .grid.follow { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+
+  .prompt {
+    position: relative;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 16px 18px 22px;
+    box-shadow: var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .prompt::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 16px; bottom: 16px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: var(--c);
+  }
+  .prompt:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--c) 35%, var(--line)); }
+  .prompt p { margin: 0; flex: 1; font-size: 16.5px; font-weight: 500; }
+  .follow .prompt { padding: 13px 12px 13px 18px; border-radius: 13px; box-shadow: none; }
+  .follow .prompt::before { top: 12px; bottom: 12px; width: 3px; opacity: .5; }
+  .follow .prompt p { font-size: 15.5px; font-weight: 500; color: #2B3550; }
+
+  .ph {
+    color: var(--c);
+    background: var(--c-soft);
+    border-radius: 6px;
+    padding: 1px 6px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .app { font-weight: 700; color: var(--ink); background: #EEF1F7; border-radius: 6px; padding: 1px 6px; }
+
+  button.copy {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 600 13.5px var(--font);
+    color: var(--c);
+    background: var(--c-soft);
+    border: 0;
+    border-radius: 999px;
+    padding: 7px 13px;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  button.copy svg { width: 15px; height: 15px; }
+  button.copy:hover { background: var(--c); color: #fff; }
+  button.copy.done { background: var(--c); color: #fff; }
+
+  .callout {
+    display: flex;
+    gap: 14px;
+    background: var(--c-soft);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin: 16px 0 4px;
+    color: var(--ink);
+  }
+  .callout strong { color: var(--c); }
+  .callout .bang {
+    flex: none; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--c); color: #fff; display: grid; place-items: center; font-weight: 800;
+  }
+  .note { color: var(--muted); font-size: 15px; margin: 14px 0 0; }
+
+  /* Getting started */
+  .ways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+  .way { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+  .way h4 { margin: 0 0 12px; font-size: 16px; font-weight: 700; }
+  .way dl { margin: 0; display: grid; gap: 10px; font-size: 14.5px; }
+  .way dt { font-weight: 700; display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); }
+  .way dt .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .way dd { margin: 0; }
+  .dot.o { background: #0F6CBD; } .dot.g { background: #EA4335; }
+
+  .rules { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+  .rules li {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 16px 14px 48px; position: relative;
+  }
+  .rules li::before {
+    content: "✓"; position: absolute; left: 16px; top: 13px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--c-soft); color: var(--c); font-weight: 800; font-size: 13px;
+    display: grid; place-items: center;
+  }
+
+  footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 24px; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; gap: 0; padding-top: 32px; }
+    nav.toc { display: none; }
+    .ways { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .hero-inner { padding: 48px 20px 40px; }
+    .layout { padding: 28px 20px 72px; }
+    .prompt { flex-direction: column; }
+    button.copy { align-self: flex-end; }
+  }
+  @media print {
+    .hero { background: none; }
+    nav.toc, .picker, button.copy { display: none !important; }
+    .layout { display: block; padding: 0; }
+    .prompt, .way, .rules li { box-shadow: none; break-inside: avoid; }
+    section { break-inside: avoid-page; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>AI Email Assistant: Starter Prompts</h1>
+    <p>Copy a prompt, change the highlighted parts, and paste it into Copilot in Outlook or Gemini in Gmail.</p>
+    <div class="picker" role="group" aria-label="Choose your mail app">
+      <span class="label">I'm using</span>
+      <div class="seg">
+        <button type="button" data-app="Outlook" aria-pressed="false"><span class="dot"></span>Outlook</button>
+        <button type="button" data-app="Gmail" aria-pressed="false"><span class="dot"></span>Gmail</button>
+      </div>
+      <span class="hint">Prompts will name your app when copied.</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" aria-label="Sections">
+    <ol>
+      <li class="s-start"><a href="#start"><span class="swatch"></span>Getting started</a></li>
+      <li class="s-catch"><a href="#catch-up"><span class="swatch"></span>Catch up</a></li>
+      <li class="s-thread"><a href="#threads"><span class="swatch"></span>Long threads</a></li>
+      <li class="s-reply"><a href="#reply"><span class="swatch"></span>Reply</a></li>
+      <li class="s-find"><a href="#find"><span class="swatch"></span>Find things</a></li>
+      <li class="s-plan"><a href="#plan"><span class="swatch"></span>Plan</a></li>
+      <li class="s-habits"><a href="#habits"><span class="swatch"></span>Good habits</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section id="start" class="s-start">
+      <div class="sec-head">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+        <h2>Getting started</h2>
+      </div>
+      <p>Every prompt on this page works in both assistants. Here's where to find them.</p>
+      <div class="ways">
+        <div class="way">
+          <h4>Ask about your mailbox</h4>
+          <dl>
+            <dt><span class="dot o"></span>Outlook</dt><dd>Click the <strong>Copilot</strong> icon in the toolbar to open the chat pane.</dd>
+            <dt><span class="dot g"></span>Gmail</dt><dd>Click the <strong>Gemini</strong> star at the top right to open the side panel.</dd>
+          </dl>
+        </div>
+        <div class="way">
+          <h4>Summarize one email</h4>
+          <dl>
+            <dt><span class="dot o"></span>Outlook</dt><dd>Open the email and click <strong>Summary</strong> at the top.</dd>
+            <dt><span class="dot g"></span>Gmail</dt><dd>Open the email and click <strong>Summarize this email</strong>.</dd>
+          </dl>
+        </div>
+        <div class="way">
+          <h4>Get help replying</h4>
+          <dl>
+            <dt><span class="dot o"></span>Outlook</dt><dd>Click Reply, then <strong>Draft with Copilot</strong>.</dd>
+            <dt><span class="dot g"></span>Gmail</dt><dd>Check the <strong>suggested replies</strong>, or use <strong>Help me write</strong>.</dd>
+          </dl>
+        </div>
+      </div>
+      <ul class="rules">
+        <li>The assistant only sees your own mailbox, and it can miss things. Treat its answers as a starting point.</li>
+        <li>Nothing is sent until you click Send. You are responsible for every email that leaves your mailbox.</li>
+        <li>Be specific: say who, what time period, and what format you want back.</li>
+      </ul>
+    </section>
+
+    <section id="catch-up" class="s-catch">
+      <div class="sec-head">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></svg></div>
+        <div><span class="step">Step 1</span><h2>Catch up: what needs my attention?</h2></div>
+      </div>
+      <p>Start your day here. These prompts turn a full inbox into a short list.</p>
+      <h3>Ask</h3>
+      <div class="grid">
+        <div class="prompt"><p>Which emails from the past 24 hours need a reply from me? Give me the sender, subject, and what they need.</p></div>
+        <div class="prompt"><p>Summarize what I missed since [Friday afternoon]. Skip newsletters and automated notifications.</p></div>
+        <div class="prompt"><p>Which emails from clients need my attention today?</p></div>
+        <div class="prompt"><p>Is anyone waiting on a confirmation or an answer from me this week?</p></div>
+      </div>
+      <h3>Follow up with</h3>
+      <div class="grid follow">
+        <div class="prompt"><p>Rank those by urgency. Put anything with a deadline at the top.</p></div>
+        <div class="prompt"><p>Which of these can I just acknowledge with a quick reply?</p></div>
+        <div class="prompt"><p>Why did you include the email from [sender]?</p></div>
+        <div class="prompt"><p>Why didn't you include the email about [subject]?</p></div>
+        <div class="prompt"><p>Did you check the whole period? Show me anything older you may have skipped.</p></div>
+        <div class="prompt"><p>Someone else replying in the thread does not count as my reply. Check again.</p></div>
+      </div>
+    </section>
+
+    <section id="threads" class="s-thread">
+      <div class="sec-head">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg></div>
+        <div><span class="step">Step 2</span><h2>Understand a long thread</h2></div>
+      </div>
+      <p>Open the email first, then ask. This saves reading 15 replies to find the one line that matters.</p>
+      <h3>Ask</h3>
+      <div class="grid">
+        <div class="prompt"><p>Summarize this thread in three bullets: what's decided, what's still open, and what's needed from me.</p></div>
+        <div class="prompt"><p>What exactly is [sender] asking me to do? Quote the sentence.</p></div>
+        <div class="prompt"><p>List every date, deadline, and amount mentioned in this thread.</p></div>
+        <div class="prompt"><p>Who is involved in this thread and what does each person want?</p></div>
+      </div>
+      <h3>Follow up with</h3>
+      <div class="grid follow">
+        <div class="prompt"><p>What has changed since my last reply?</p></div>
+        <div class="prompt"><p>Is any question in this thread still unanswered?</p></div>
+        <div class="prompt"><p>Explain [term] in plain language.</p></div>
+      </div>
+    </section>
+
+    <section id="reply" class="s-reply">
+      <div class="sec-head">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg></div>
+        <div><span class="step">Step 3</span><h2>Reply in your own voice</h2></div>
+      </div>
+      <p>Open the email you are replying to, then ask.</p>
+      <div class="callout">
+        <span class="bang">!</span>
+        <div>Always end a drafting prompt with <strong>“Create it as a reply draft in Outlook”</strong> or <strong>“Create it as a reply draft in Gmail”</strong>. Without that line, the draft stays as text in the chat pane and no compose window opens.</div>
+      </div>
+      <h3>Ask</h3>
+      <div class="grid">
+        <div class="prompt"><p>Draft a short reply confirming [what you're confirming]. Keep it warm and natural, in my usual tone. No more than three sentences. Create it as a reply draft in [Outlook / Gmail].</p></div>
+        <div class="prompt"><p>Draft a quick acknowledgement: I received this and will respond by [day]. Create it as a reply draft in [Outlook / Gmail].</p></div>
+        <div class="prompt"><p>Draft a polite reply declining [request] and suggesting [alternative]. Create it as a reply draft in [Outlook / Gmail].</p></div>
+        <div class="prompt"><p>Draft a reply asking [sender] for [the missing document or information]. Create it as a reply draft in [Outlook / Gmail].</p></div>
+      </div>
+      <h3>Follow up with</h3>
+      <div class="grid follow">
+        <div class="prompt"><p>Make it shorter.</p></div>
+        <div class="prompt"><p>Make it warmer.</p></div>
+        <div class="prompt"><p>Make it more formal.</p></div>
+        <div class="prompt"><p>Remove anything that sounds like it was written by AI.</p></div>
+        <div class="prompt"><p>Sign off the way I usually do.</p></div>
+        <div class="prompt"><p>Add that I'll follow up by [Thursday].</p></div>
+      </div>
+      <p class="note">The draft then opens as a reply in the thread, ready to review and send. In Gmail, also check the suggested replies under the email first; they're often good enough for a simple acknowledgement.</p>
+    </section>
+
+    <section id="find" class="s-find">
+      <div class="sec-head">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <div><span class="step">Step 4</span><h2>Find things</h2></div>
+      </div>
+      <p>Describe what you remember in plain words. You don't need exact subject lines or search operators.</p>
+      <h3>Ask</h3>
+      <div class="grid">
+        <div class="prompt"><p>Find the email where [person] sent the [document] last month.</p></div>
+        <div class="prompt"><p>When did I last hear from [person], and what was it about?</p></div>
+        <div class="prompt"><p>Show me emails with attachments from [company] this month.</p></div>
+        <div class="prompt"><p>What did we agree with [person] about [topic]?</p></div>
+      </div>
+      <h3>Follow up with</h3>
+      <div class="grid follow">
+        <div class="prompt"><p>Give me a link to the original email.</p></div>
+        <div class="prompt"><p>Has there been anything else from them since?</p></div>
+      </div>
+    </section>
+
+    <section id="plan" class="s-plan">
+      <div class="sec-head">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 15l2 2 4-4"/></svg></div>
+        <div><span class="step">Step 5</span><h2>Plan: deadlines, meetings, and follow-ups</h2></div>
+      </div>
+      <p>Use these to make sure nothing slips, including replies you are still waiting for from others.</p>
+      <h3>Ask</h3>
+      <div class="grid">
+        <div class="prompt"><p>What deadlines or dates are mentioned in my emails this week?</p></div>
+        <div class="prompt"><p>Which emails did I send in the past week that haven't had a reply yet?</p></div>
+        <div class="prompt"><p>Prepare me for my [2 pm] meeting with [person]: the relevant emails and any open questions.</p></div>
+        <div class="prompt"><p>Draft a polite follow-up to [person] about [subject], since I haven't heard back. Create it as a reply draft in [Outlook / Gmail].</p></div>
+      </div>
+      <h3>Follow up with</h3>
+      <div class="grid follow">
+        <div class="prompt"><p>Turn these into a to-do list.</p></div>
+        <div class="prompt"><p>Add this to my tasks.</p></div>
+      </div>
+      <p class="note">Copilot adds tasks to Microsoft To Do; Gemini adds them to Google Tasks.</p>
+    </section>
+
+    <section id="habits" class="s-habits">
+      <div class="sec-head">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h2>Good habits and safety</h2>
+      </div>
+      <p>The assistant is a fast helper, not a lawyer or a final reviewer.</p>
+      <ul class="rules">
+        <li><strong>Read every draft before sending.</strong> Check names, dates, amounts, and anything legal against the original email.</li>
+        <li><strong>Don't rely on it for legal judgments.</strong> Use it for admin, summaries, and routine replies.</li>
+        <li><strong>Keep client information inside the firm's tools.</strong> Use only Copilot in Outlook and Gemini in Gmail. Never paste client emails into outside AI apps such as ChatGPT.</li>
+        <li><strong>Be suspicious of short lists.</strong> If an answer seems incomplete, ask: “Did you check everything?”</li>
+        <li><strong>Report anything odd to IT,</strong> such as wrong summaries, invented details, or replies that don't sound like you.</li>
+      </ul>
+    </section>
+
+    <footer>Prepared by Tekii IT Consulting.</footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  var APP_TOKEN = "[Outlook / Gmail]";
+  var COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
+  var CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+  var app = null;
+  try { app = localStorage.getItem("prompt-sheet-app"); } catch (e) {}
+
+  var prompts = Array.prototype.slice.call(document.querySelectorAll(".prompt p"));
+  prompts.forEach(function (p) { p.dataset.src = p.textContent; });
+
+  function escapeHtml(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function plainText(src) { return app ? src.split(APP_TOKEN).join(app) : src; }
+
+  function render() {
+    prompts.forEach(function (p) {
+      p.innerHTML = escapeHtml(p.dataset.src).replace(/\[([^\]]+)\]/g, function (m, inner) {
+        if (m === APP_TOKEN && app) return '<span class="app">' + app + "</span>";
+        return '<span class="ph">[' + inner + "]</span>";
+      });
+    });
+    document.querySelectorAll(".seg button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.app === app));
+    });
+  }
+
+  document.querySelectorAll(".seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      app = app === b.dataset.app ? null : b.dataset.app;
+      try { app ? localStorage.setItem("prompt-sheet-app", app) : localStorage.removeItem("prompt-sheet-app"); } catch (e) {}
+      render();
+    });
+  });
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy") ? resolve() : reject(); } catch (e) { reject(e); }
+      document.body.removeChild(ta);
+    });
+  }
+
+  document.querySelectorAll(".prompt").forEach(function (box) {
+    var p = box.querySelector("p");
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy";
+    btn.innerHTML = COPY_ICON + "Copy";
+    btn.setAttribute("aria-label", "Copy this prompt");
+    btn.addEventListener("click", function () {
+      copyText(plainText(p.dataset.src)).then(function () {
+        btn.innerHTML = CHECK_ICON + "Copied";
+        btn.classList.add("done");
+        setTimeout(function () { btn.innerHTML = COPY_ICON + "Copy"; btn.classList.remove("done"); }, 1600);
+      }, function () { btn.textContent = "Select and copy"; });
+    });
+    box.appendChild(btn);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
